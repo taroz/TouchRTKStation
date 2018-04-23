@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=TouchRTKStation
+Type=Application
+Exec=/usr/bin/python3 /home/pi/TouchRTKStation/TouchRTKStation.py
+Terminal=false
