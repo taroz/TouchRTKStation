@@ -360,7 +360,7 @@ class MainWidget(QWidget):
             if self.mode_rtkk.isChecked():
                 optfile='kinematic.conf'
 
-            main.p = Popen(exe+' -o '+MainWindow.dirtrs+'/conf/'+optfile+' -p '+str(self.tnport), shell=True)
+            main.p = Popen(exe+' -o '+MainWindow.dirtrs+'/conf/'+optfile+' -p '+str(self.tnport)+' -m 52001', shell=True)
             time.sleep(1)
             self.tn = telnetlib.Telnet('localhost',self.tnport)
 
