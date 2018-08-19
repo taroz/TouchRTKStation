@@ -15,46 +15,59 @@ class MainWindow(QMainWindow):
     dirtrs = os.path.dirname(os.path.abspath(__file__))
     dirrtk = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
+    # serial port settings
+    serial_port = (['serial0','serial1','ttyACM0','ttyACM1','ttyUSB0','ttyUSB1'])
+    serial_bitrate = (['300','600','1200','2400','4800','9600','19200','38400','57600','115200','230400'])
+    serial_bytesize = (['7 bits','8 bits'])   #[7 8]
+    serial_parity = (['None','Even','Odd'])   #[n e o]
+    serial_stopbits = (['1 bit','2 bits'])    #[1 2]
+    serial_flowcontrol = (['None','RTS/CTS']) #[off rtscts]
+
     # ublox command file for Base mode
     ubxcmd = dirtrs+'/conf/ubx_m8t_bds_raw_1hz.cmd'
 
     # Default Base position configuration
-    basepos_type=(['LLH','RTCM'])
-    basepos_itype=0
-    basepos_lat='35.0'
-    basepos_lon='139.0'
-    basepos_hgt='50.0'
+    basepos_type = (['LLH','RTCM']) # for Rover
+    basepos_itype = 1 # for Rover
+    basepos_lat = '35.0'
+    basepos_lon = '139.0'
+    basepos_hgt = '50.0'
 
     # Default Input stream configration
-    input_port = (['serial0','serial1','ttyACM0','ttyACM1','ttyUSB0','ttyUSB1'])
-    input_bitrate = (['300','600','1200','2400','4800','9600','19200','38400','57600','115200','230400'])
-    input_bytesize = (['7 bits','8 bits'])   #[7 8]
-    input_parity = (['None','Even','Odd'])   #[n e o]
-    input_stopbits = (['1 bit','2 bits'])    #[1 2]
-    input_flowcontrol = (['None','RTS/CTS']) #[off rtscts]
-    input_iport=2
-    input_ibitrate = 9
-    input_ibytesize = 1
-    input_iparity = 0
-    input_istopbits = 0
-    input_iflowcontrol = 0
+    input_iport= 2         # ttyACM0
+    input_ibitrate = 9     # 115200 bps
+    input_ibytesize = 1    # 8 bit
+    input_iparity = 0      # None
+    input_istopbits = 0    # 1 bit
+    input_iflowcontrol = 0 # None
 
     # Default Correction stream configration
     corr_flag = False
-    corr_type=(['NTRIP Client','TCP Client'])
-    corr_itype=0
-    corr_format=(['RTCM2','RTCM3','BINEX','UBX'])
-    corr_iformat=1
+    corr_type = (['NTRIP Client','TCP Client'])
+    corr_itype = 0
+    corr_format = (['RTCM2','RTCM3','BINEX','UBX'])
+    corr_iformat = 1
     corr_user = 'user'
     corr_addr = 'test.net'
     corr_port = '2101'
     corr_pw = 'password'
     corr_mp = 'RTCM'
 
+    # Default Correction(Serial) stream configration
+    corr2_flag = False
+    corr2_format = (['RTCM2','RTCM3','BINEX','UBX'])
+    corr2_iformat = 3
+    corr2_iport= 4         # ttyUSB0
+    corr2_ibitrate = 9     # 115200 bps
+    corr2_ibytesize = 1    # 8 bit
+    corr2_iparity = 0      # None
+    corr2_istopbits = 0    # 1 bit
+    corr2_iflowcontrol = 0 # None
+
     # Default Log/Solution stream configration
     log_flag = True
     sol_flag = True
-    dir = glob.glob('/media/*/*/')
+    dir = glob.glob('/media/*/*/') # Find USB memory
     if len(dir)==0:
         dir = [dirtrs+'/']
     sol_filename = dir[0]+'%Y-%m%d-%h%M%S.pos'
@@ -63,9 +76,9 @@ class MainWindow(QMainWindow):
     # Default Output stream configration
     output_flag = False
     output_type=(['TCP Server','NTRIP Server','NTRIP Caster'])
-    output_itype=1
-    output_format=(['UBX','RTCM3'])
-    output_iformat=0
+    output_itype = 0    # TCP Server
+    output_format = (['UBX','RTCM3'])
+    output_iformat = 0  # UBX
     output_user = 'user'
     output_addr = 'test.net'
     output_port = '2101'
@@ -74,18 +87,14 @@ class MainWindow(QMainWindow):
 
     # Default Output(Serial) stream configration
     output2_flag = False
-    output2_port = (['serial0','serial1','ttyACM0','ttyACM1','ttyUSB0','ttyUSB1'])
-    output2_bitrate = (['300','600','1200','2400','4800','9600','19200','38400','57600','115200','230400'])
-    output2_bytesize = (['7 bits','8 bits'])   #[7 8]
-    output2_parity = (['None','Even','Odd'])   #[n e o]
-    output2_stopbits = (['1 bit','2 bits'])    #[1 2]
-    output2_flowcontrol = (['None','RTS/CTS']) #[off rtscts]
-    output2_iport=4
-    output2_ibitrate = 9
-    output2_ibytesize = 1
-    output2_iparity = 0
-    output2_istopbits = 0
-    output2_iflowcontrol = 0
+    output2_format = (['UBX','RTCM3'])
+    output2_iformat = 0      # UBX
+    output2_iport= 4         # ttyUSB0
+    output2_ibitrate = 9     # 115200 bps
+    output2_ibytesize = 1    # 8 bit
+    output2_iparity = 0      # None
+    output2_istopbits = 0    # 1 bit
+    output2_iflowcontrol = 0 # None
 
     def __init__(self):
         super().__init__()
@@ -100,7 +109,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_w)
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        #self.setGeometry(100, 100, 480, 320)
+        # self.setGeometry(100, 100, 480, 320) # for debug
         self.showFullScreen()
 
         self.show()
@@ -126,6 +135,7 @@ class MainWindow(QMainWindow):
 
         rawstream=self.main_w.rtkrcvCommand(self.main_w.tn,'stream')
         rawstreams=rawstream.split('\n')
+        print(rawstream)
 
         statstr=''
         for stream in rawstreams:
@@ -136,6 +146,8 @@ class MainWindow(QMainWindow):
                 streams=stream.split()
                 if streams[0]=='input':
                     statstr=statstr+streams[1]+':'+streams[6]+'bps  '
+                elif streams[0]=='monitor':
+                     pass
                 else:
                     statstr=statstr+streams[0]+':'+streams[8]+'bps  '
         self.main_w.status_rov.setText(statstr)
@@ -246,7 +258,7 @@ class MainWidget(QWidget):
         vbox1_1.addLayout(hbox1_3)
         hbox1.addLayout(vbox1_1)
 
-        #
+        # Positining results
         lSol_=QLabel('Sol:')
         lSol_.setAlignment(QtCore.Qt.AlignRight)
         self.lSol=QLabel('')
@@ -460,6 +472,8 @@ class MainWidget(QWidget):
         itype.append('serial')
         iformat.append('ubx')
         ipath.append(self.makeInputCmd(1))
+        
+        # input(correction stream)
         if MainWindow.corr_flag:
             itype.append(corrtypes[MainWindow.corr_itype])
             iformat.append(corrformats[MainWindow.corr_iformat])
@@ -467,6 +481,10 @@ class MainWidget(QWidget):
                 ipath.append(self.makeNtripCliCmd())
             elif MainWindow.corr_itype==1: # TCP Client
                 ipath.append(self.makeTcpCliCmd())
+        if MainWindow.corr2_flag:
+            itype.append('serial')
+            iformat.append(corrformats[MainWindow.corr2_iformat])
+            ipath.append(self.makeCorrectionSerialCmd())
 
         # output
         otype=[]
@@ -510,8 +528,8 @@ class MainWidget(QWidget):
         if MainWindow.output2_flag:
             cmd=cmd+self.makeSerialOutputCmd()
             # Format conversion
-            if MainWindow.output_iformat:
-                cmd=cmd+'#'+outputformats[MainWindow.output_iformat]
+            if MainWindow.output2_iformat:
+                cmd=cmd+'#'+outputformats[MainWindow.output2_iformat]
         return cmd
 
     def makeInputCmd(self,sta):
@@ -519,8 +537,8 @@ class MainWidget(QWidget):
         parity_s = (['n','e','o'])
         stopb_s =(['1','2'])
         flwctr_s =(['off','rtscts'])
-        port    =MainWindow.input_port[MainWindow.input_iport]
-        bitrate =MainWindow.input_bitrate[MainWindow.input_ibitrate]
+        port    =MainWindow.serial_port[MainWindow.input_iport]
+        bitrate =MainWindow.serial_bitrate[MainWindow.input_ibitrate]
         byte = byte_s[MainWindow.input_ibytesize]
         parity = parity_s[MainWindow.input_iparity]
         stopb = stopb_s[MainWindow.input_istopbits]
@@ -528,6 +546,20 @@ class MainWidget(QWidget):
         cmd = port+':'+bitrate+':'+byte+':'+parity+':'+stopb+':'+flwctr
         if sta==2: # for str2str
             cmd=' -in serial://'+cmd+'#ubx'
+        return cmd
+
+    def makeCorrectionSerialCmd(self):
+        byte_s = (['7','8'])
+        parity_s = (['n','e','o'])
+        stopb_s =(['1','2'])
+        flwctr_s =(['off','rtscts'])
+        port    =MainWindow.serial_port[MainWindow.corr2_iport]
+        bitrate =MainWindow.serial_bitrate[MainWindow.corr2_ibitrate]
+        byte = byte_s[MainWindow.corr2_ibytesize]
+        parity = parity_s[MainWindow.corr2_iparity]
+        stopb = stopb_s[MainWindow.corr2_istopbits]
+        flwctr = flwctr_s[MainWindow.corr2_iflowcontrol]
+        cmd = port+':'+bitrate+':'+byte+':'+parity+':'+stopb+':'+flwctr
         return cmd
 
     def makeTcpCliCmd(self):
@@ -599,12 +631,14 @@ class RoverConfigWindow:
         tabs = QTabWidget()
 
         self.tab_input=InputConfig()
-        self.tab_corr=CorrectionConfig()
+        self.tab_corr1=CorrectionConfig()
+        self.tab_corr2=CorrectionSerialConfig()
         self.tab_sol=SolConfig()
         self.tab_log=LogConfig()
         self.tab_basepos=BasePosConfig_Rover()
         tabs.addTab(self.tab_input,"Input")
-        tabs.addTab(self.tab_corr,"Correction")
+        tabs.addTab(self.tab_corr1,"Correction1")
+        tabs.addTab(self.tab_corr2,"Correction2")
         tabs.addTab(self.tab_sol,"Solution")
         tabs.addTab(self.tab_log,"Log")
         tabs.addTab(self.tab_basepos,"BasePos")
@@ -632,14 +666,22 @@ class RoverConfigWindow:
         MainWindow.input_istopbits=self.tab_input.stopbits_list.currentIndex()
         MainWindow.input_iflowcontrol=self.tab_input.flowcontrol_list.currentIndex()
 
-        MainWindow.corr_flag=self.tab_corr.corr_b.isChecked()
-        MainWindow.corr_itype=self.tab_corr.type_list.currentIndex()
-        MainWindow.corr_iformat=self.tab_corr.format_list.currentIndex()
-        MainWindow.corr_addr=self.tab_corr.addr_edit.text()
-        MainWindow.corr_port=self.tab_corr.port_edit.text()
-        MainWindow.corr_mp=self.tab_corr.mp_edit.text()
-        MainWindow.corr_user=self.tab_corr.user_edit.text()
-        MainWindow.corr_pw=self.tab_corr.pw_edit.text()
+        MainWindow.corr_flag=self.tab_corr1.corr_b.isChecked()
+        MainWindow.corr_itype=self.tab_corr1.type_list.currentIndex()
+        MainWindow.corr_iformat=self.tab_corr1.format_list.currentIndex()
+        MainWindow.corr_addr=self.tab_corr1.addr_edit.text()
+        MainWindow.corr_port=self.tab_corr1.port_edit.text()
+        MainWindow.corr_mp=self.tab_corr1.mp_edit.text()
+        MainWindow.corr_user=self.tab_corr1.user_edit.text()
+        MainWindow.corr_pw=self.tab_corr1.pw_edit.text()
+
+        MainWindow.corr2_flag=self.tab_corr2.corr2_b.isChecked()
+        MainWindow.corr2_iport=self.tab_corr2.port_list.currentIndex()
+        MainWindow.corr2_ibitrate=self.tab_corr2.bitrate_list.currentIndex()
+        MainWindow.corr2_ibytesize=self.tab_corr2.bytesize_list.currentIndex()
+        MainWindow.corr2_iparity=self.tab_corr2.parity_list.currentIndex()
+        MainWindow.corr2_istopbits=self.tab_corr2.stopbits_list.currentIndex()
+        MainWindow.corr2_iflowcontrol=self.tab_corr2.flowcontrol_list.currentIndex()
 
         MainWindow.sol_flag=self.tab_sol.sol_b.isChecked()
         MainWindow.sol_filename=self.tab_sol.output_edit.text()
@@ -738,27 +780,27 @@ class InputConfig(QWidget):
 
     def initInputUI(self):
         self.port_list=QComboBox(self)
-        self.port_list.addItems(MainWindow.input_port)
+        self.port_list.addItems(MainWindow.serial_port)
         self.port_list.setCurrentIndex(MainWindow.input_iport)
 
         self.bitrate_list=QComboBox(self)
-        self.bitrate_list.addItems(MainWindow.input_bitrate)
+        self.bitrate_list.addItems(MainWindow.serial_bitrate)
         self.bitrate_list.setCurrentIndex(MainWindow.input_ibitrate)
 
         self.bytesize_list=QComboBox(self)
-        self.bytesize_list.addItems(MainWindow.input_bytesize)
+        self.bytesize_list.addItems(MainWindow.serial_bytesize)
         self.bytesize_list.setCurrentIndex(MainWindow.input_ibytesize)
 
         self.parity_list=QComboBox(self)
-        self.parity_list.addItems(MainWindow.input_parity)
+        self.parity_list.addItems(MainWindow.serial_parity)
         self.parity_list.setCurrentIndex(MainWindow.input_iparity)
 
         self.stopbits_list=QComboBox(self)
-        self.stopbits_list.addItems(MainWindow.input_stopbits)
+        self.stopbits_list.addItems(MainWindow.serial_stopbits)
         self.stopbits_list.setCurrentIndex(MainWindow.input_istopbits)
 
         self.flowcontrol_list=QComboBox(self)
-        self.flowcontrol_list.addItems(MainWindow.input_flowcontrol)
+        self.flowcontrol_list.addItems(MainWindow.serial_flowcontrol)
         self.flowcontrol_list.setCurrentIndex(MainWindow.input_iflowcontrol)
 
         #add
@@ -828,6 +870,63 @@ class CorrectionConfig(QWidget):
             self.mp_edit.setDisabled(True)
             self.user_edit.setDisabled(True)
             self.pw_edit.setDisabled(True)
+
+# Correction(Serial) config
+class CorrectionSerialConfig(QWidget):
+    def __init__(self,parent=None):
+        super().__init__()
+        self.initCorrectionSerialUI()
+
+    def initCorrectionSerialUI(self):
+        self.corr2_b = QCheckBox("Enable",self)
+        self.corr2_b.setChecked(MainWindow.corr2_flag)
+
+        self.format_list=QComboBox(self)
+        self.format_list.addItems(MainWindow.corr2_format)
+        self.format_list.setCurrentIndex(MainWindow.corr2_iformat)
+
+        self.port_list=QComboBox(self)
+        self.port_list.addItems(MainWindow.serial_port)
+        self.port_list.setCurrentIndex(MainWindow.corr2_iport)
+
+        self.bitrate_list=QComboBox(self)
+        self.bitrate_list.addItems(MainWindow.serial_bitrate)
+        self.bitrate_list.setCurrentIndex(MainWindow.corr2_ibitrate)
+
+        self.bytesize_list=QComboBox(self)
+        self.bytesize_list.addItems(MainWindow.serial_bytesize)
+        self.bytesize_list.setCurrentIndex(MainWindow.corr2_ibytesize)
+
+        self.parity_list=QComboBox(self)
+        self.parity_list.addItems(MainWindow.serial_parity)
+        self.parity_list.setCurrentIndex(MainWindow.corr2_iparity)
+
+        self.stopbits_list=QComboBox(self)
+        self.stopbits_list.addItems(MainWindow.serial_stopbits)
+        self.stopbits_list.setCurrentIndex(MainWindow.corr2_istopbits)
+
+        self.flowcontrol_list=QComboBox(self)
+        self.flowcontrol_list.addItems(MainWindow.serial_flowcontrol)
+        self.flowcontrol_list.setCurrentIndex(MainWindow.corr2_iflowcontrol)
+
+        #add
+        grid=QGridLayout()
+        grid.addWidget(self.corr2_b,0,0)
+        grid.addWidget(QLabel('Format'),0,2)
+        grid.addWidget(self.format_list,0,3)
+        grid.addWidget(QLabel('Port'),1,0)
+        grid.addWidget(self.port_list,1,1)
+        grid.addWidget(QLabel('Bit Rate'),1,2)
+        grid.addWidget(self.bitrate_list,1,3)
+        grid.addWidget(QLabel('Byte Size'),2,0)
+        grid.addWidget(self.bytesize_list,2,1)
+        grid.addWidget(QLabel('Parity'),2,2)
+        grid.addWidget(self.parity_list,2,3)
+        grid.addWidget(QLabel('Stop Bits'),3,0)
+        grid.addWidget(self.stopbits_list,3,1)
+        grid.addWidget(QLabel('Flow Control'),3,2)
+        grid.addWidget(self.flowcontrol_list,3,3)
+        self.setLayout(grid)
 
 # Output config
 class OutputConfig(QWidget):
@@ -914,33 +1013,39 @@ class OutputSerialConfig(QWidget):
         self.output2_b = QCheckBox("Enable",self)
         self.output2_b.setChecked(MainWindow.output2_flag)
 
+        self.format_list=QComboBox(self)
+        self.format_list.addItems(MainWindow.output2_format)
+        self.format_list.setCurrentIndex(MainWindow.output2_iformat)
+
         self.port_list=QComboBox(self)
-        self.port_list.addItems(MainWindow.output2_port)
+        self.port_list.addItems(MainWindow.serial_port)
         self.port_list.setCurrentIndex(MainWindow.output2_iport)
 
         self.bitrate_list=QComboBox(self)
-        self.bitrate_list.addItems(MainWindow.output2_bitrate)
+        self.bitrate_list.addItems(MainWindow.serial_bitrate)
         self.bitrate_list.setCurrentIndex(MainWindow.output2_ibitrate)
 
         self.bytesize_list=QComboBox(self)
-        self.bytesize_list.addItems(MainWindow.output2_bytesize)
+        self.bytesize_list.addItems(MainWindow.serial_bytesize)
         self.bytesize_list.setCurrentIndex(MainWindow.output2_ibytesize)
 
         self.parity_list=QComboBox(self)
-        self.parity_list.addItems(MainWindow.output2_parity)
+        self.parity_list.addItems(MainWindow.serial_parity)
         self.parity_list.setCurrentIndex(MainWindow.output2_iparity)
 
         self.stopbits_list=QComboBox(self)
-        self.stopbits_list.addItems(MainWindow.output2_stopbits)
+        self.stopbits_list.addItems(MainWindow.serial_stopbits)
         self.stopbits_list.setCurrentIndex(MainWindow.output2_istopbits)
 
         self.flowcontrol_list=QComboBox(self)
-        self.flowcontrol_list.addItems(MainWindow.output2_flowcontrol)
+        self.flowcontrol_list.addItems(MainWindow.serial_flowcontrol)
         self.flowcontrol_list.setCurrentIndex(MainWindow.output2_iflowcontrol)
 
         #add
         grid=QGridLayout()
         grid.addWidget(self.output2_b,0,0)
+        grid.addWidget(QLabel('Format'),0,2)
+        grid.addWidget(self.format_list,0,3)
         grid.addWidget(QLabel('Port'),1,0)
         grid.addWidget(self.port_list,1,1)
         grid.addWidget(QLabel('Bit Rate'),1,2)
@@ -989,7 +1094,7 @@ class LogConfig(QWidget):
         grid.addWidget(self.output_edit,1,1)
         self.setLayout(grid)
 
-# BasePos config
+# BasePos config (Rover)
 class BasePosConfig_Rover(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -1028,7 +1133,7 @@ class BasePosConfig_Rover(QWidget):
             self.lon_edit.setDisabled(True)
             self.hgt_edit.setDisabled(True)
 
-# BasePos config
+# BasePos config (Base)
 class BasePosConfig_Base(QWidget):
     def __init__(self,parent=None):
         super().__init__()
