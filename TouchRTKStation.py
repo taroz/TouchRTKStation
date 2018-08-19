@@ -109,7 +109,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_w)
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        # self.setGeometry(100, 100, 480, 320) # for debug
+        # self.setGeometry(100, 100, 480, 320) # For debug
         self.showFullScreen()
 
         self.show()
@@ -395,6 +395,9 @@ class MainWidget(QWidget):
             self.rtkrcvOption(self.tn,'ant2-pos1',MainWindow.basepos_lat)
             self.rtkrcvOption(self.tn,'ant2-pos2',MainWindow.basepos_lon)
             self.rtkrcvOption(self.tn,'ant2-pos3',MainWindow.basepos_hgt)
+            
+            # Receiver command
+            self.rtkrcvOption(self.tn,'file-cmdfile1',MainWindow.ubxcmd)
 
             self.rtkrcvCommand(self.tn,'start')
             main.rover_timer.start(1000)
