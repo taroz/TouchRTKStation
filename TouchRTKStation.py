@@ -425,7 +425,7 @@ class MainWidget(QWidget):
 
             # shutdown
             self.tn.write('shutdown\r\n'.encode())
-            time.sleep(1)
+            time.sleep(2)
 
             self.status_rov.setText('')
             self.lSol.setText('')
