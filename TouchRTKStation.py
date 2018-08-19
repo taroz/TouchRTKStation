@@ -99,7 +99,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
-
+    
+    # Initialization
     def initUI(self):
         self.rover_timer = QtCore.QTimer(self)
         self.rover_timer.timeout.connect(self.updateRover)
@@ -114,6 +115,7 @@ class MainWindow(QMainWindow):
 
         self.show()
 
+    # Dispaly status in rover mode
     def updateRover(self):
         rawsol=self.main_w.rtkrcvCommand(self.main_w.tn,'solution')
         print(rawsol)
@@ -135,7 +137,7 @@ class MainWindow(QMainWindow):
 
         rawstream=self.main_w.rtkrcvCommand(self.main_w.tn,'stream')
         rawstreams=rawstream.split('\n')
-        print(rawstream)
+        # print(rawstream)
 
         statstr=''
         for stream in rawstreams:
@@ -151,7 +153,8 @@ class MainWindow(QMainWindow):
                 else:
                     statstr=statstr+streams[0]+':'+streams[8]+'bps  '
         self.main_w.status_rov.setText(statstr)
-
+    
+    # Dispaly status in base mode
     def updateBase(self):
         rawstream = self.p.stderr.readline().decode('utf-8')
         print(rawstream)
@@ -197,6 +200,7 @@ class MainWidget(QWidget):
         vbox.addWidget(self.tabs)
         self.setLayout(vbox)
 
+    # Rover tab
     def tabRoverUI(self):
         # Start button
         self.start_rov = QPushButton('Start',self)
@@ -289,11 +293,13 @@ class MainWidget(QWidget):
         # Show layout
         self.tabRover.setLayout(vbox)
 
+    # Rover config window
     def makeRoverConfig(self):
         pass
         subWindow=RoverConfigWindow(self)
         subWindow.show()
 
+    # Base tab
     def tabBaseUI(self):
         # Start button
         self.start_base = QPushButton('Start',self)
@@ -336,20 +342,24 @@ class MainWidget(QWidget):
         # Show layout
         self.tabBase.setLayout(vbox)
 
+    # Base config window
     def makeBaseConfig(self):
         subWindow=BaseConfigWindow(self)
         subWindow.show()
 
+    # Send command to rtkrcv
     def rtkrcvCommand(self,tn,cmd):
         sendcmd=cmd+'\r\n'
         tn.write(sendcmd.encode())
         ret=tn.read_until(b'rtkrcv> ')
         return ret.decode()
 
+    # Send option to rtkrcv
     def rtkrcvOption(self,tn,opt,val):
         cmd='set '+opt+' '+val
         self.rtkrcvCommand(tn,cmd)
 
+    # Send stream information to rtkrcv
     def rtkrcvSetStream(self,tn,name,stype,sformat,spath):
         self.rtkrcvOption(tn,name+'-type',stype)
         self.rtkrcvOption(tn,name+'-format',sformat)
@@ -445,25 +455,25 @@ class MainWidget(QWidget):
             main.p.terminate()
             self.status_base.setText('')
 
-    # Single
+    # Single button
     def sppToggled(self,checked):
         if checked:
             self.mode_rtks.setChecked(False)
             self.mode_rtkk.setChecked(False)
 
-    # RTK-Static
+    # RTK-Static button
     def rtksToggled(self,checked):
         if checked:
             self.mode_spp.setChecked(False)
             self.mode_rtkk.setChecked(False)
 
-    # RTK-Kinematic
+    # RTK-Kinematic button
     def rtkkToggled(self,checked):
         if checked:
             self.mode_spp.setChecked(False)
             self.mode_rtks.setChecked(False)
 
-    # Generating commands
+    # Generating Rover commands
     def makeCommandRover(self):
         corrtypes=['ntripcli','tcpcli']
         corrformats=['rtcm2','rtcm3','binex','ubx']
@@ -511,6 +521,7 @@ class MainWidget(QWidget):
         print(ipath)
         return itype,iformat,ipath,otype,oformat,opath,ltype,lformat,lpath
 
+    # Generating Base commands
     def makeCommandBase(self):
         outputformats=['ubx','rtcm3']
         cmd=self.makeInputCmd(2)
@@ -535,6 +546,7 @@ class MainWidget(QWidget):
                 cmd=cmd+'#'+outputformats[MainWindow.output2_iformat]
         return cmd
 
+    # Generating Input command
     def makeInputCmd(self,sta):
         byte_s = (['7','8'])
         parity_s = (['n','e','o'])
@@ -551,6 +563,7 @@ class MainWidget(QWidget):
             cmd=' -in serial://'+cmd+'#ubx'
         return cmd
 
+    # Generating CorrectionSerial command
     def makeCorrectionSerialCmd(self):
         byte_s = (['7','8'])
         parity_s = (['n','e','o'])
@@ -565,11 +578,13 @@ class MainWidget(QWidget):
         cmd = port+':'+bitrate+':'+byte+':'+parity+':'+stopb+':'+flwctr
         return cmd
 
+    # Generating TCP Client command
     def makeTcpCliCmd(self):
         addr=MainWindow.corr_addr
         port=MainWindow.corr_port
         return addr+':'+port
 
+    # Generating NTRIP Client command
     def makeNtripCliCmd(self):
         user= MainWindow.corr_user
         pw  = MainWindow.corr_pw
@@ -578,6 +593,7 @@ class MainWidget(QWidget):
         addr= MainWindow.corr_addr
         return user+':'+pw+'@'+addr+':'+port+'/'+mp
 
+    # Generating Solution command
     def makeSolCmd(self):
         filename=MainWindow.sol_filename
         return filename
@@ -589,10 +605,12 @@ class MainWidget(QWidget):
             cmd=' -out file://'+cmd
         return cmd
 
+    # Generating TCP Server command
     def makeTcpSvrCmd(self):
         port=MainWindow.output_port
         return ' -out tcpsvr://:'+port
 
+    # Generating NTRIP Sever command
     def makeNtripSvrCmd(self):
         pw  = MainWindow.output_pw
         port= MainWindow.output_port
@@ -600,6 +618,7 @@ class MainWidget(QWidget):
         addr= MainWindow.output_addr
         return ' -out ntrips://:'+pw+'@'+addr+':'+port+'/'+mp
 
+    # Generating NTRIP Caster command
     def makeNtripCasCmd(self):
         user= MainWindow.output_user
         pw  = MainWindow.output_pw
@@ -607,6 +626,7 @@ class MainWidget(QWidget):
         mp  = MainWindow.output_mp
         return ' -out ntripc_c://'+user+':'+pw+'@:'+port+'/'+mp
 
+    # Generating Serial output command
     def makeSerialOutputCmd(self):
         byte_s = (['7','8'])
         parity_s = (['n','e','o'])
@@ -661,6 +681,7 @@ class RoverConfigWindow:
 
         self.w.setLayout(layout)
 
+    # Apply button
     def applyParam(self):
         MainWindow.input_iport=self.tab_input.port_list.currentIndex()
         MainWindow.input_ibitrate=self.tab_input.bitrate_list.currentIndex()
@@ -739,6 +760,7 @@ class BaseConfigWindow:
 
         self.w.setLayout(layout)
 
+    # Apply button
     def applyParam(self):
         MainWindow.input_iport=self.tab_input.port_list.currentIndex()
         MainWindow.input_ibitrate=self.tab_input.bitrate_list.currentIndex()
@@ -775,7 +797,7 @@ class BaseConfigWindow:
     def show(self):
         self.w.exec_()
 
-# Input config
+# Input tab (Rover/Base)
 class InputConfig(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -822,7 +844,7 @@ class InputConfig(QWidget):
         grid.addWidget(self.flowcontrol_list,2,3)
         self.setLayout(grid)
 
-# Correction config
+# Correction tab (Rover)
 class CorrectionConfig(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -874,7 +896,7 @@ class CorrectionConfig(QWidget):
             self.user_edit.setDisabled(True)
             self.pw_edit.setDisabled(True)
 
-# Correction(Serial) config
+# Correction(Serial) tab (Rover)
 class CorrectionSerialConfig(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -931,7 +953,7 @@ class CorrectionSerialConfig(QWidget):
         grid.addWidget(self.flowcontrol_list,3,3)
         self.setLayout(grid)
 
-# Output config
+# Output tab  (Rover/Base)
 class OutputConfig(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -1006,7 +1028,7 @@ class OutputConfig(QWidget):
         else:
             return hosts[0].decode()
 
-# Output(Serial) config
+# Output(Serial) tab (Base)
 class OutputSerialConfig(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -1063,7 +1085,7 @@ class OutputSerialConfig(QWidget):
         grid.addWidget(self.flowcontrol_list,3,3)
         self.setLayout(grid)
 
-# Solution config
+# Solution tab (Rover)
 class SolConfig(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -1080,7 +1102,7 @@ class SolConfig(QWidget):
         grid.addWidget(self.output_edit,1,1)
         self.setLayout(grid)
 
-# Log config
+# Log tab (Rover/Base)
 class LogConfig(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -1097,7 +1119,7 @@ class LogConfig(QWidget):
         grid.addWidget(self.output_edit,1,1)
         self.setLayout(grid)
 
-# BasePos config (Rover)
+# BasePos tab (Rover)
 class BasePosConfig_Rover(QWidget):
     def __init__(self,parent=None):
         super().__init__()
@@ -1136,7 +1158,7 @@ class BasePosConfig_Rover(QWidget):
             self.lon_edit.setDisabled(True)
             self.hgt_edit.setDisabled(True)
 
-# BasePos config (Base)
+# BasePos tab (Base)
 class BasePosConfig_Base(QWidget):
     def __init__(self,parent=None):
         super().__init__()
