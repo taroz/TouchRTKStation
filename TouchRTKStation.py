@@ -633,7 +633,7 @@ class MainWidget(QWidget):
         parity_s = (['n','e','o'])
         stopb_s =(['1','2'])
         flwctr_s =(['off','rtscts'])
-        port    =MainWindow.output2_port[MainWindow.output2_iport]
+        port    =MainWindow.serial_port[MainWindow.output2_iport]
         bitrate =MainWindow.output2_bitrate[MainWindow.output2_ibitrate]
         byte = byte_s[MainWindow.output2_ibytesize]
         parity = parity_s[MainWindow.output2_iparity]
