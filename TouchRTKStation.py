@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
     serial_stopbits = (['1 bit','2 bits'])    #[1 2]
     serial_flowcontrol = (['None','RTS/CTS']) #[off rtscts]
 
-    # ublox command file for Base mode
+    # ublox command file for Base/Rover mode
     ubxcmd = dirtrs+'/conf/ubx_m8t_bds_raw_1hz.cmd'
 
     # Default Base position configuration
