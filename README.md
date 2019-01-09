@@ -52,13 +52,13 @@
 <img src="./doc/TRS5.jpg" width="640"><p>  
 
 - Mount the battery holder to the main case  
-<img src="./doc/TRS6-1.jpg" width="320">  
+<img src="./doc/TRS6-1.jpg" width="320"><p>  
 
 - Mount Raspberry Pi to the main case  
 <img src="./doc/TRS7.jpg" width="640"><p>  
 
 - Mount the Tallysman GNSS antenna to the top plate  
-<img src="./doc/TRS8-1.jpg" width="320"><img src="./doc/TRS8-2.jpg" width="320"><p>  
+<img src="./doc/TRS8-1.jpg" width="320"> <img src="./doc/TRS8-2.jpg" width="320"><p>  
 
 - Connect the GNSS antenna cable to the GNSS receiver.
 - Connect the USB cables  
