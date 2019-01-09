@@ -97,7 +97,7 @@
 <img src="./doc/TRS11-1.png" width="320"> <img src="./doc/TRS11-2.png" width="320">
 
 1. Select “**Rover**” tab. Select “**Single**”，”**RTK(Static)**”, or “**RTK(Kinematic)**”
-2. Push “**Config**”.  For RTK-GNSS, setup the input stream information in the “**Correction**” tab.  In the “**BasePos**” tab, input the base sanitation position．
+2. Push “**Config**”.  For RTK-GNSS, setup the input stream information in the “**Correction1**” tab. If ZigBee or any wireless communication device, which are recognized as USB serial port, is used to receive the GNSS data, setup the input stream information in “**Correction2**” tab. In the “**BasePos**” tab, input the base sanitation position．
 3. Push “**Start**”.  Positioning results will be shown after GNSS ephemeris data are decoded.
 4. Push “**Stop**”. GNSS Raw data and positioning result are stored in the USB memory.
 
@@ -105,7 +105,7 @@
 <img src="./doc/TRS12-1.png" width="320"> <img src="./doc/TRS12-2.png" width="320">
 
 1. Select “**Base**” tab.
-2. Push “**Config**”.  To broadcast GNSS correction data, setup a output stream information in the “**Output1**” tab. If ZigBee or any wireless communication device, which are recognized as USB serial port, is used  to transmit the GNSS data, setup the output stream information in “**Output2**” tab. If you want to convert the UBX format to the RTCM format, input the base station position in "**BasePos**” tab.
+2. Push “**Config**”.  To broadcast GNSS correction data, setup a output stream information in the “**Output1**” tab. If ZigBee or any wireless communication device, which are recognized as USB serial port, is used to transmit the GNSS data, setup the output stream information in “**Output2**” tab. If you want to convert the UBX format to the RTCM format, input the base station position in "**BasePos**” tab.
 3. Push “**Start**”. GNSS data will be stored or broadcasted.
 4. Push “**Stop**”. GNSS Raw data are stored in the USB memory.
 
