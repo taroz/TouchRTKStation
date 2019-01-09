@@ -32,7 +32,7 @@
   - Or buy from [Shapeways](https://www.shapeways.com/shops/tarosuzuki)
 - **GNSS receiver:** u-blox M8T [CSG shop](http://www.csgshop.com/product.php?id_product=205)
 - **Mini-USB cable:**
-- **GNSS antenna:** Tallysman TW3710 (GPS+GLO+BDS L1) [Digi-Key](https://www.digikey.com/products/en?keywords=tw3710)
+- **GNSS antenna:** Tallysman TW3710 or TW3740 (GPS+GLO+BDS L1) [Digi-Key(TW3710)](https://www.digikey.com/products/en?keywords=tw3710) or  [Digi-Key(TW3710)](https://www.digikey.com/products/en?keywords=tw3740)  
 - **Raspberry Pi 3:**
 - **micro SD card:**
 - **TNC(P)-SMA(J) connector:**
@@ -40,8 +40,8 @@
 - **4inch Display:** Waveshare 4inch_RPi_LCD [Waveshare](https://www.waveshare.com/4inch-rpi-lcd-a.htm)
 - **DC-DC converter:** 7.4V to 5V [Strawberry Linux](https://strawberry-linux.com/catalog/items?code=18697), [Amazon](https://www.amazon.com/DZS-Elec-Converter-Regulator-Charging/dp/B07121W7Q4/ref=sr_1_5?ie=UTF8&qid=1533692135&sr=8-5&keywords=dc%2Bconverter%2B5v%2Busb&dpID=51rETi5CNdL&preST=_SY300_QL70_&dpSrc=srch&th=1)
 - **micro-USB cable:**
-- **Battery holder:** Lilliput Battery Plate for Sony Battery F-970 [Amazon](https://www.amazon.com/Battery-Adapter-VX2100E-Lilliput-Accessory/dp/B009SJIG0K)
-- **Battery:** Sony NP-F570 (2900mAh) or NP-F770 (5000mAh) [Amazon](https://www.amazon.com/RAVPower-Battery-Charger-CCD-SC55-Replacement/dp/B0761SH551/ref=sr_1_1_sspa?ie=UTF8&qid=1533691661&sr=8-1-spons&keywords=NP-F770&psc=1)
+- **Battery holder:** Lilliput Battery Plate for Sony Battery F-970 [eBay](https://www.ebay.com/itm/LILLIPUT-Battery-Adapter-Base-Plate-F970-for-Sony-VX2100E-HVR-V1C-F330-/371421670220), [Amazon](https://www.amazon.com/Battery-Adapter-VX2100E-Lilliput-Accessory/dp/B009SJIG0K)
+- **Battery:** Sony NP-F550/F570 (2900mAh) or NP-F750/F770 (5000mAh) [Amazon](https://www.amazon.com/dp/B07DC5RYPM/ref=cm_sw_em_r_mt_dp_U_qOHnCbFWY47XD)
 - **5/8 inch nut:**
 - **Ground plane:**
 
